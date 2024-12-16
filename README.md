@@ -15,3 +15,46 @@ This backend provides a REST API for managing energy data. The main functionalit
 | GET         | `/api/meters`  | Retrieve all available meter IDs.             | None                                      | JSON: List of meter IDs        | `application/json`   |
 
 
+---
+
+# Application Flow Diagram
+
+```
+Frontend
+   ^
+   |
+   v
+Controller
+   ^
+   |
+   v
+Service Layer
+   ^
+   |
+   v
+Service Implementation
+   ^
+   |
+   v
+JPA Repository Layer
+   ^
+   |
+   v 
+Database
+```
+
+---
+
+# Database Schema
+
+```
++-------------------+               +---------------------+
+|  ReadingType      |               |  IntervalReading    |
++-------------------+               +---------------------+
+| id (PK)           |<-one to many->| id (PK)             |
+| meterId           |               | reading_type_id (FK)|
+| flowDirection     |               | startTimestamp      |
+| kwhPrice          |               | durationSeconds     |
+| readingUnit       |               | readingValue        |
++-------------------+               +---------------------+
+```
