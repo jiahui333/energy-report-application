@@ -1,6 +1,9 @@
 # Application Overview
 A solution where you parse the xml files and build a report which contains the hourly energy values, the price per hour and the sum of energy and price per meter.
 
+
+---
+
 # Backend API Documentation
 
 ## Overview
