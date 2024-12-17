@@ -80,7 +80,6 @@ public class ReportGeneratingServiceImplTest {
 
     @Test
     void getReport_shouldGroupIntervalReadingsByHour() {
-        // Arrange
         String meterId = "12345";
 
         ReadingType readingType = new ReadingType();

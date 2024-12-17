@@ -8,7 +8,7 @@ type MeterSelectorProps = {
 
 const MeterSelector = ({ meters, selectedMeter, onChange }: MeterSelectorProps) => {
     const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
-        onChange(e.target.value); //Only ide complaint, no error on the application level
+        onChange(e.target.value);
     };
 
     return (
