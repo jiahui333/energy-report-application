@@ -34,7 +34,7 @@ public class ReportGeneratingServiceImplTest {
     private IntervalReadingRepository intervalReadingRepository;
 
     @Test
-    void getReport_shouldReturnReportForValidMeterId() {
+    void getReport_validMeterId_returnReport() {
         String meterId = "12345";
 
         ReadingType readingType = new ReadingType();
@@ -56,7 +56,7 @@ public class ReportGeneratingServiceImplTest {
     }
 
     @Test
-    void getReport_shouldThrowReportGenerationExceptionWhenNoReadingType() {
+    void getReport_noReadingType_throwReportGenerationException() {
         String meterId = "12345";
         when(readingTypeRepository.findByMeterId(meterId)).thenReturn(Optional.empty());
 
@@ -65,7 +65,7 @@ public class ReportGeneratingServiceImplTest {
     }
 
     @Test
-    void getReport_shouldThrowReportGenerationExceptionWhenNoIntervalReadings() {
+    void getReport_noIntervalReading_throwReportGenerationException() {
         String meterId = "12345";
 
         ReadingType readingType = new ReadingType();
@@ -79,7 +79,7 @@ public class ReportGeneratingServiceImplTest {
     }
 
     @Test
-    void getReport_shouldGroupIntervalReadingsByHour() {
+    void getReport_validIntervalReadings_generateReport() {
         String meterId = "12345";
 
         ReadingType readingType = new ReadingType();

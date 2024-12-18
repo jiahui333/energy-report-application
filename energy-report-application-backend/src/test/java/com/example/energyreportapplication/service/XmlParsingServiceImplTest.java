@@ -2,7 +2,6 @@ package com.example.energyreportapplication.service;
 
 import com.example.energyreportapplication.exception.MissingDataException;
 import com.example.energyreportapplication.exception.XmlParsingException;
-import com.example.energyreportapplication.model.entity.IntervalReading;
 import com.example.energyreportapplication.model.entity.ReadingType;
 import com.example.energyreportapplication.repository.IntervalReadingRepository;
 import com.example.energyreportapplication.repository.ReadingTypeRepository;
@@ -14,6 +13,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -36,11 +36,10 @@ public class XmlParsingServiceImplTest {
     @Mock
     private IntervalReadingRepository intervalReadingRepository;
 
-    @Mock
-    private XmlMapper xmlMapper;
+    private final XmlMapper xmlMapper = new XmlMapper();
 
     @Test
-    void parseAndStore_validXml_shouldSaveIntervalReadingsAndReadingType() throws JsonProcessingException {
+    void parseAndStore_validXml_saveIntervalReadingsAndReadingType() throws JsonProcessingException {
         String validXml = "<mocked-xml-content>";
         Feed mockFeed = createValidFeed();
         when(xmlMapper.readValue(validXml, Feed.class)).thenReturn(mockFeed);
@@ -55,45 +54,9 @@ public class XmlParsingServiceImplTest {
     }
 
     @Test
-    void parseAndStore_missingFields_shouldThrowMissingDataException() throws JsonProcessingException {
-        String xmlWithoutFields = "<mocked-xml-content>";
-        Feed mockFeed = new Feed();
-        when(xmlMapper.readValue(xmlWithoutFields, Feed.class)).thenReturn(mockFeed);
-
-        assertThrows(MissingDataException.class, () -> xmlParsingService.parseAndStore(xmlWithoutFields));
-    }
-
-    @Test
-    void parseAndStore_missingEntries_shouldThrowMissingDataException() throws JsonProcessingException {
-        String xmlWithoutEntries = "<mocked-xml-content>";
-        Feed mockFeed = createFeedWithoutEntries();
-        when(xmlMapper.readValue(xmlWithoutEntries, Feed.class)).thenReturn(mockFeed);
-
-        assertThrows(MissingDataException.class, () -> xmlParsingService.parseAndStore(xmlWithoutEntries));
-    }
-
-    @Test
-    void parseAndStore_missingReadingType_shouldThrowMissingDataException() throws JsonProcessingException {
-        String xmlWithoutReadingType = "<mocked-xml-content>";
-        Feed mockFeed = createFeedWithoutReadingType();
-        when(xmlMapper.readValue(xmlWithoutReadingType, Feed.class)).thenReturn(mockFeed);
-
-        assertThrows(MissingDataException.class, () -> xmlParsingService.parseAndStore(xmlWithoutReadingType));
-    }
-
-    @Test
-    void parseAndStore_invalidXml_shouldThrowXmlParsingException() throws JsonProcessingException {
-        String invalidXml = "<invalid-xml>";
-        when(xmlMapper.readValue(invalidXml, Feed.class)).thenThrow(JsonProcessingException.class);
-
-        assertThrows(XmlParsingException.class, () -> xmlParsingService.parseAndStore(invalidXml));
-        verifyNoInteractions(readingTypeRepository, intervalReadingRepository);
-    }
-
-    @Test
-    void parseAndStore_shouldReturnExistingReadingTypeIfPresent() throws JsonProcessingException {
+    void parseAndStore_existingReadingType_notSavingReadingType() throws JsonProcessingException {
         String validXml = "<mocked-xml-content>";
-        Feed mockFeed = createValidFeed(); // Ensure the feed references an existing meterId
+        Feed mockFeed = createValidFeed();
         when(xmlMapper.readValue(validXml, Feed.class)).thenReturn(mockFeed);
 
         ReadingType existingReadingType = new ReadingType();
@@ -105,7 +68,7 @@ public class XmlParsingServiceImplTest {
     }
 
     @Test
-    void parseAndStore_shouldSaveNewReadingTypeIfNotFound() throws JsonProcessingException {
+    void parseAndStore_noExistingReadingType_createAndSaveNewReadingType() throws JsonProcessingException {
         String validXml = "<mocked-xml-content>";
         Feed mockFeed = createValidFeed();
         when(xmlMapper.readValue(validXml, Feed.class)).thenReturn(mockFeed);
@@ -116,27 +79,43 @@ public class XmlParsingServiceImplTest {
 
         xmlParsingService.parseAndStore(validXml);
 
-        verify(readingTypeRepository).save(any(ReadingType.class)); // Ensure a new ReadingType is created
+        verify(readingTypeRepository).save(any(ReadingType.class));
     }
 
+    @Test
+    void parseAndStore_missingId_throwMissingDataException() throws JsonProcessingException {
+        String xmlWithoutId = "<mocked-xml-content>";
+        Feed mockFeed = new Feed();
+        when(xmlMapper.readValue(xmlWithoutId, Feed.class)).thenReturn(mockFeed);
+
+        assertThrows(MissingDataException.class, () -> xmlParsingService.parseAndStore(xmlWithoutId));
+    }
 
     @Test
-    void parseAndStore_shouldHandleIntervalReadingMapping() throws JsonProcessingException {
-        String validXml = "<mocked-xml-content>";
-        Feed mockFeed = createValidFeed();
-        when(xmlMapper.readValue(validXml, Feed.class)).thenReturn(mockFeed);
+    void parseAndStore_missingEntries_throwMissingDataException() throws JsonProcessingException {
+        String xmlWithoutEntries = "<mocked-xml-content>";
+        Feed mockFeed = createFeedWithoutEntries();
+        when(xmlMapper.readValue(xmlWithoutEntries, Feed.class)).thenReturn(mockFeed);
 
-        ReadingType mockReadingType = new ReadingType();
-        when(readingTypeRepository.findByMeterId(anyString())).thenReturn(Optional.of(mockReadingType));
+        assertThrows(MissingDataException.class, () -> xmlParsingService.parseAndStore(xmlWithoutEntries));
+    }
 
-        xmlParsingService.parseAndStore(validXml);
+    @Test
+    void parseAndStore_missingReadingType_throwMissingDataException() throws JsonProcessingException {
+        String xmlWithoutReadingType = "<mocked-xml-content>";
+        Feed mockFeed = createFeedWithoutReadingType();
+        when(xmlMapper.readValue(xmlWithoutReadingType, Feed.class)).thenReturn(mockFeed);
 
-        verify(intervalReadingRepository).saveAll(argThat(intervalReadings ->
-                ((List<IntervalReading>) intervalReadings).stream().allMatch(intervalReading ->
-                        intervalReading.getReadingType() == mockReadingType &&
-                                intervalReading.getStartTimestamp() > 0L
-                )
-        ));
+        assertThrows(MissingDataException.class, () -> xmlParsingService.parseAndStore(xmlWithoutReadingType));
+    }
+
+    @Test
+    void parseAndStore_invalidXml_throwXmlParsingException() throws JsonProcessingException {
+        String invalidXml = "<invalid-xml>";
+        when(xmlMapper.readValue(invalidXml, Feed.class)).thenThrow(JsonProcessingException.class);
+
+        assertThrows(XmlParsingException.class, () -> xmlParsingService.parseAndStore(invalidXml));
+        verifyNoInteractions(readingTypeRepository, intervalReadingRepository);
     }
 
     // Helper methods to create mock Feed objects

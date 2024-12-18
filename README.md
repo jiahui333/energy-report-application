@@ -29,29 +29,7 @@ This backend provides a REST API for managing energy data. The main functionalit
 
 # Application Flow Diagram
 
-```
-Frontend
-   ^
-   |
-   v
-Controller
-   ^
-   |
-   v
-Service Layer
-   ^
-   |
-   v
-Service Implementation
-   ^
-   |
-   v
-JPA Repository Layer
-   ^
-   |
-   v 
-Database
-```
+![flow](./asset/EnergyReportApplicationFlow.jpg)
 
 ---
 

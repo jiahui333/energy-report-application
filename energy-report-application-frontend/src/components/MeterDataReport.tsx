@@ -17,7 +17,7 @@ const MeterReport = ({ meterId }: MeterReportProps) => {
         setError('');
         setReport(null);
 
-        fetch(`http://localhost:8080/api/report?meterId=9346bfb3-20aa-3412-ffab-44f88b917919`)
+        fetch(`http://localhost:8080/api/report?meterId=${meterId}`)
             .then(response => {
                 if (!response.ok) {
                     throw new Error(`Server returned ${response.status}`);

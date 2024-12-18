@@ -13,6 +13,7 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,14 +38,14 @@ public class XmlParsingServiceImpl implements XmlParsingService {
         this.xmlMapper = new XmlMapper();
     }
 
-    // For testing
-    protected XmlParsingServiceImpl(ReadingTypeRepository readingTypeRepository,
-                                 IntervalReadingRepository intervalReadingRepository,
-                                    XmlMapper xmlMapper) {
-        this.readingTypeRepository = readingTypeRepository;
-        this.intervalReadingRepository = intervalReadingRepository;
-        this.xmlMapper = xmlMapper;
-    }
+//    // For testing
+//    protected XmlParsingServiceImpl(ReadingTypeRepository readingTypeRepository,
+//                                 IntervalReadingRepository intervalReadingRepository,
+//                                    XmlMapper xmlMapper) {
+//        this.readingTypeRepository = readingTypeRepository;
+//        this.intervalReadingRepository = intervalReadingRepository;
+//        this.xmlMapper = xmlMapper;
+//    }
 
     @Override
     @Transactional
