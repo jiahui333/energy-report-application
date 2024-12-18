@@ -49,10 +49,10 @@ public class ReportGeneratingServiceImplTest {
 
         ReportDto report = reportGeneratingService.getReport(meterId);
 
-        assertEquals(meterId, report.getMeterId());
-        assertEquals(100L, report.getTotalEnergy());
-        assertEquals(BigDecimal.valueOf(10.0), report.getTotalCost());
-        assertEquals(1, report.getHourlyReports().size());
+        assertEquals(meterId, report.meterId());
+        assertEquals(100L, report.totalEnergy());
+        assertEquals(BigDecimal.valueOf(10.0), report.totalCost());
+        assertEquals(1, report.hourlyReports().size());
     }
 
     @Test
@@ -99,9 +99,9 @@ public class ReportGeneratingServiceImplTest {
 
         ReportDto report = reportGeneratingService.getReport(meterId);
 
-        assertEquals(2, report.getHourlyReports().size());
-        assertEquals(300L, report.getTotalEnergy());
-        assertEquals(BigDecimal.valueOf(30.0), report.getTotalCost());
+        assertEquals(2, report.hourlyReports().size());
+        assertEquals(300L, report.totalEnergy());
+        assertEquals(BigDecimal.valueOf(30.0), report.totalCost());
     }
 }
 
