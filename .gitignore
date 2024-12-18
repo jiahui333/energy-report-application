@@ -1,1 +1,26 @@
-/.idea/
+### General ###
+.idea/
+.DS_Store
+*.iws
+*.iml
+*.ipr
+
+### Backend ###
+energy-report-application-backend/HELP.md
+energy-report-application-backend/target/
+!energy-report-application-backend/.mvn/wrapper/maven-wrapper.jar
+!energy-report-application-backend/**/src/main/**/target/
+!energy-report-application-backend/**/src/test/**/target/
+
+### Frontend ###
+energy-report-application-frontend/logs
+energy-report-application-frontend/*.log
+energy-report-application-frontend/npm-debug.log*
+energy-report-application-frontend/yarn-debug.log*
+energy-report-application-frontend/yarn-error.log*
+energy-report-application-frontend/pnpm-debug.log*
+energy-report-application-frontend/lerna-debug.log*
+energy-report-application-frontend/node_modules
+energy-report-application-frontend/dist
+energy-report-application-frontend/dist-ssr
+energy-report-application-frontend/*.local

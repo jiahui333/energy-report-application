@@ -35,7 +35,8 @@ public class XmlParsingServiceImplTest {
     @Mock
     private IntervalReadingRepository intervalReadingRepository;
 
-    private final XmlMapper xmlMapper = new XmlMapper();
+    @Mock
+    private XmlMapper xmlMapper;
 
     @Test
     void parseAndStore_validXml_saveIntervalReadingsAndReadingType() throws JsonProcessingException {
