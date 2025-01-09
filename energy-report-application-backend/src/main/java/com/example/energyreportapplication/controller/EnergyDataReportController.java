@@ -1,7 +1,6 @@
 package com.example.energyreportapplication.controller;
 
 import com.example.energyreportapplication.model.dto.ReportDto;
-import com.example.energyreportapplication.model.entity.ReadingType;
 import com.example.energyreportapplication.repository.ReadingTypeRepository;
 import com.example.energyreportapplication.service.ReportGeneratingService;
 import com.example.energyreportapplication.service.XmlParsingService;
@@ -11,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * REST Controller for managing energy data reporting.
@@ -42,7 +40,6 @@ public class EnergyDataReportController {
     public EnergyDataReportController(XmlParsingService xmlParsingService, ReportGeneratingService reportGeneratingService, ReadingTypeRepository readingTypeRepository) {
         this.xmlParsingService = xmlParsingService;
         this.reportGeneratingService = reportGeneratingService;
-        this.readingTypeRepository = readingTypeRepository;
     }
 
     /**
