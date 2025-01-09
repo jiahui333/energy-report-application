@@ -14,6 +14,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -102,6 +103,22 @@ public class ReportGeneratingServiceImplTest {
         assertEquals(2, report.hourlyReports().size());
         assertEquals(300L, report.totalEnergy());
         assertEquals(BigDecimal.valueOf(30.0), report.totalCost());
+    }
+
+    @Test
+    void getAllMeterIds_validMeterIds_returnAllMeterIds() {
+        ReadingType readingType1 = new ReadingType();
+        readingType1.setMeterId("meter1");
+        ReadingType readingType2 = new ReadingType();
+        readingType2.setMeterId("meter2");
+
+        when(readingTypeRepository.findAll()).thenReturn(Arrays.asList(readingType1, readingType2));
+
+        List<String> meterIds = reportGeneratingService.getAllMeterIds();
+
+        assertEquals(2, meterIds.size());
+        assertTrue(meterIds.contains("meter1"));
+        assertTrue(meterIds.contains("meter2"));
     }
 }
 

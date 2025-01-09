@@ -30,7 +30,6 @@ public class EnergyDataReportController {
 
     private final XmlParsingService xmlParsingService;
     private final ReportGeneratingService reportGeneratingService;
-    private final ReadingTypeRepository readingTypeRepository;
 
     /**
      * Constructs the EnergyDataReportController with required services.
@@ -86,10 +85,7 @@ public class EnergyDataReportController {
      */
     @GetMapping(value = "/meters", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<String>> getMeters() {
-        List<String> meterIds = readingTypeRepository.findAll()
-                .stream()
-                .map(ReadingType::getMeterId)
-                .collect(Collectors.toList());
+        List<String> meterIds = reportGeneratingService.getAllMeterIds();
         return ResponseEntity.ok(meterIds);
     }
 }

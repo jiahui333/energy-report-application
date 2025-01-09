@@ -71,6 +71,14 @@ public class ReportGeneratingServiceImpl implements ReportGeneratingService {
         return report;
     }
 
+    @Override
+    public List<String> getAllMeterIds() {
+        return readingTypeRepository.findAll()
+                .stream()
+                .map(ReadingType::getMeterId)
+                .collect(Collectors.toList());
+    }
+
     private long toHourStart(long timestamp) {
         OffsetDateTime offsetDateTime = OffsetDateTime.ofInstant(Instant.ofEpochSecond(timestamp), ZoneOffset.UTC)
                 .truncatedTo(ChronoUnit.HOURS);
